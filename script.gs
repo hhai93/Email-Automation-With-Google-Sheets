@@ -1,26 +1,26 @@
-// Hàm chính kiểm tra và gửi email
+// Main function to check and send emails
 function checkAndSendEmails() {
   const sheet = SpreadsheetApp.getActiveSheet();
   const data = sheet.getDataRange().getValues();
   const today = new Date();
   const formattedToday = formatDate(today);
 
-  // Bỏ qua hàng tiêu đề
+  // Skip header row
   data.slice(1).forEach(row => {
-    const name = row[1]; // Họ tên
+    const name = row[1]; // Full Name
     const email = row[2]; // Email
-    const sendDate = row[3]; // Ngày gửi
-    const content = row[4]; // Nội dung
-    const fileId = row[5]; // File ID trên Google Drive
+    const sendDate = row[3]; // Send Date
+    const content = row[4]; // Content
+    const fileId = row[5]; // Google Drive File ID
 
     if (formattedToday === sendDate) {
-      const personalizedContent = content.replace("[Họ tên]", name);
+      const personalizedContent = content.replace("[Full Name]", name);
       sendEmail(email, "Automated Notification", personalizedContent, fileId);
     }
   });
 }
 
-// Gửi email với file đính kèm
+// Send email with attachment
 function sendEmail(to, subject, content, fileId) {
   try {
     let attachments = [];
@@ -41,7 +41,7 @@ function sendEmail(to, subject, content, fileId) {
   }
 }
 
-// Định dạng ngày thành dd/MM/yyyy
+// Format date to dd/MM/yyyy
 function formatDate(date) {
   const day = String(date.getDate()).padStart(2, "0");
   const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -49,17 +49,17 @@ function formatDate(date) {
   return `${day}/${month}/${year}`;
 }
 
-// Tạo trigger chạy tự động lúc 7h sáng mỗi ngày
+// Create daily trigger to run at 7 AM
 function createDailyTrigger() {
-  deleteAllTriggers(); // Xóa trigger cũ
+  deleteAllTriggers(); // Remove old triggers
   ScriptApp.newTrigger("checkAndSendEmails")
     .timeBased()
-    .atHour(7) // 7h sáng UTC, chỉnh nếu cần
+    .atHour(7) // 7 AM UTC, adjust if needed
     .everyDays(1)
     .create();
 }
 
-// Xóa tất cả trigger hiện có
+// Delete all existing triggers
 function deleteAllTriggers() {
   const triggers = ScriptApp.getProjectTriggers();
   triggers.forEach(trigger => ScriptApp.deleteTrigger(trigger));
