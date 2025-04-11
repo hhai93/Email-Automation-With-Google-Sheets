@@ -1,4 +1,4 @@
-# Email-Automation-with-Google-Sheets
+# Email Automation with Google Sheets
 
 ![GitHub](https://img.shields.io/badge/license-MIT-blue.svg) ![GitHub last commit](https://img.shields.io/github/last-commit/hhai93/Email-Automation-with-Google-Sheets)
 
